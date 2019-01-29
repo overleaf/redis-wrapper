@@ -39,6 +39,7 @@ module.exports = RedisSharelatex =
 	
 	clusterHealthCheckBuilder: (client) ->
 		healthCheck = (callback) ->
+			console.log client.nodes("all").length, "all nodes"
 			jobs = client.nodes("all").map (node) =>
 				(cb) => RedisSharelatex._checkClient(node, cb)
 			async.parallel jobs, callback
@@ -59,7 +60,7 @@ module.exports = RedisSharelatex =
 		client.ping (err) ->
 			clearTimeout timer
 			if err?
-				console.error {client}, "redis ping failed"
+				console.error {client, err}, "redis ping failed"
 			callback(err)
 		
 	_monkeyPatchIoredisExec: (client) ->

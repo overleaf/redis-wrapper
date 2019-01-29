@@ -52,11 +52,14 @@ module.exports = RedisSharelatex =
 			console.error {
 				err: error,
 				key: client.options?.key # only present for cluster
+				client: client
 			}, "client timed out"
 			callback(error)
 		, RedisSharelatex.HEARTBEAT_TIMEOUT
 		client.ping (err) ->
 			clearTimeout timer
+			if err?
+				console.error {client}, "redis ping failed"
 			callback(err)
 		
 	_monkeyPatchIoredisExec: (client) ->

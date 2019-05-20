@@ -26,6 +26,11 @@ module.exports = RedisSharelatex =
 			client = new ioredis(standardOpts)
 			RedisSharelatex._monkeyPatchIoredisExec(client)
 			client.healthCheck = RedisSharelatex.singleInstanceHealthCheckBuilder(client)
+		client.on 'error', (error) ->
+			console.error {
+				err: error
+				key: client.options?.key # only present for cluster
+			}, "redis client error"
 		return client
 	
 	HEARTBEAT_TIMEOUT: 2000
